@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroControl - Identificación de Plagas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>AgroControl</h2>
+            </div>
+            <nav class="menu">
+                <a href="#" class="active">Analizar Cultivo</a>
+                <a href="#">Historial Local</a>
+                <a href="#" id="btn-cerrar-sesion" style="margin-top: 10px; color: #e74c3c;">Cerrar Sesión</a>
+            </nav>
+            <div class="history-panel">
+                <h3>Consultas Recientes</h3>
+                <ul id="lista-historial">
+                    <li><a href="#">Consulta 1</a></li>
+                    <li><a href="#">Consulta 2</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Monitoreo y Diagnóstico Agrícola</h1>
+                <p>Detecta plagas mediante descripción o imágenes asistido por IA.</p>
+            </header>
+
+            <section class="dashboard-grid">
+                
+                <div class="card card-form">
+                    <h3>Formulario de Consulta</h3>
+                    <form id="form-consulta">
+                        
+                        <div class="form-group">
+                            <label for="descripcion">Descripción de los síntomas o la plaga:</label>
+                            <textarea id="descripcion" placeholder="Ej. Hojas amarillas con pequeños puntos negros en el reverso, cultivo de tomate..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imagen-plaga">O sube una fotografía del daño:</label>
+                            <div class="file-drop-area">
+                                <input type="file" id="imagen-plaga" accept="image/jpeg, image/png">
+                                <p class="file-msg">Arrastra o selecciona una imagen (JPG/PNG)</p>
+                            </div>
+                            <div id="preview-container" class="hidden">
+                                <img id="img-preview" src="" alt="Vista previa">
+                            </div>
+                        </div>
+
+                        <button type="submit" id="btn-enviar" class="btn-primary">Analizar con Gemini</button>
+                    </form>
+                </div>
+
+                <div class="card card-results" id="panel-resultados">
+                    <div class="placeholder-results">
+                        <p>Los resultados del análisis biológico aparecerán aquí una vez envíes el formulario.</p>
+                    </div>
+                    
+                    <div id="resultado-activo" class="hidden">
+                        <div class="result-header">
+                            <h2 id="res-nombre-comun">Nombre de la Plaga</h2>
+                            <em id="res-nombre-cientifico">Nombre científico</em>
+                            <span id="res-confianza" class="badge">0% Confianza</span>
+                        </div>
+                        
+                        <div class="result-body">
+                            <div class="result-section">
+                                <h4>Cultivos Afectados</h4>
+                                <p id="res-cultivos"></p>
+                            </div>
+                            <div class="result-section">
+                                <h4>Daños Causados</h4>
+                                <p id="res-danos"></p>
+                            </div>
+                            
+                            <h3>Estrategias de Manejo</h3>
+                            <div class="management-grid">
+                                <div class="manage-box cultural">
+                                    <h5>Control Cultural</h5>
+                                    <p id="res-cultural"></p>
+                                </div>
+                                <div class="manage-box biologico">
+                                    <h5>Control Biológico</h5>
+                                    <p id="res-biologico"></p>
+                                </div>
+                                <div class="manage-box quimico">
+                                    <h5>Control Químico</h5>
+                                    <p id="res-quimico"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

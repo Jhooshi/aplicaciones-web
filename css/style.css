@@ -1,0 +1,464 @@
+/* ==========================================================================
+   1. VARIABLES DE DISEÑO (Colores y Estilos Globales)
+   ========================================================================== */
+:root {
+    --primary-color: #2e7d32;       /* Verde principal agrícola */
+    --primary-hover: #1b5e20;       /* Verde más oscuro para estados hover */
+    --bg-dashboard: #f4f6f9;        /* Fondo gris claro y limpio */
+    --bg-card: #ffffff;             /* Fondo de tarjetas blanco */
+    --text-main: #2c3e50;           /* Color de texto principal */
+    --text-muted: #7f8c8d;          /* Color de texto secundario/atenuado */
+    --border-color: #e2e8f0;        /* Color para bordes sutiles */
+    
+    /* Colores para los tipos de control y alertas */
+    --cultural-color: #3498db;      /* Azul */
+    --biologico-color: #2ecc71;     /* Verde brillante */
+    --quimico-color: #e74c3c;        /* Rojo */
+    --warning-color: #f1c40f;       /* Amarillo */
+    
+    --radius: 12px;                 /* Bordes redondeados modernos */
+    --transition: all 0.3s ease;    /* Transiciones suaves */
+}
+
+/* ==========================================================================
+   2. RESET Y ESTILOS BASE
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dashboard);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+/* ==========================================================================
+   3. ESTRUCTURA PRINCIPAL (DASHBOARD LAYOUT)
+   ========================================================================== */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Barra Lateral (Sidebar) */
+.sidebar {
+    width: 280px;
+    background-color: #1a252f;      /* Fondo oscuro elegante */
+    color: #ffffff;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.logo h2 {
+    font-size: 1.5rem;
+    color: #2ecc71;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.menu a {
+    color: #ecf0f1;
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius);
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.menu a:hover, .menu a.active {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+/* Panel de Historial dentro del Sidebar */
+.history-panel {
+    margin-top: auto; /* Empuja el historial hacia abajo */
+    border-top: 1px solid #34495e;
+    padding-top: 1.5rem;
+}
+
+.history-panel h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+#lista-historial {
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#lista-historial li {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #34495e;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#lista-historial li:hover {
+    color: #2ecc71;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Área de Contenido Principal */
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.main-header h1 {
+    font-size: 2rem;
+    color: #1a252f;
+    margin-bottom: 0.25rem;
+}
+
+.main-header p {
+    color: var(--text-muted);
+}
+
+/* Grid del Dashboard (2 Columnas) */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr; /* Columna de resultados un poco más ancha */
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* Targetas (Cards) Generales */
+.card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.card h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    color: #1a252f;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   4. FORMULARIO DE CONSULTA
+   ========================================================================== */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+textarea {
+    width: 100%;
+    height: 120px;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    resize: none;
+    font-size: 0.95rem;
+    outline: none;
+    transition: var(--transition);
+}
+
+textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+}
+
+/* Zona de Carga de Archivos (Drag & Drop) */
+.file-drop-area {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    background-color: #fafafa;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.file-drop-area:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(46, 125, 50, 0.02);
+}
+
+.file-drop-area input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-msg {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Vista previa de imagen */
+#preview-container {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+#img-preview {
+    max-width: 100%;
+    max-height: 180px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+/* Botón Principal */
+.btn-primary {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.85rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+/* ==========================================================================
+   5. FICHA DE RESULTADOS (RESPUESTA DE IA)
+   ========================================================================== */
+.placeholder-results {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.result-header {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.result-header h2 {
+    color: var(--primary-color);
+    font-size: 1.6rem;
+}
+
+.result-header em {
+    color: var(--text-muted);
+    font-size: 1rem;
+    display: block;
+    margin-top: 0.2rem;
+}
+
+/* Badge de Confianza */
+.badge {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--warning-color);
+    color: #1a252f;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.result-section {
+    margin-bottom: 1.25rem;
+}
+
+.result-section h4 {
+    font-size: 0.95rem;
+    color: #1a252f;
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.result-section p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Grid de estrategias de manejo (3 Cajas) */
+#resultado-activo h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.management-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.manage-box {
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 5px solid transparent;
+}
+
+.manage-box h5 {
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+}
+
+.manage-box p {
+    font-size: 0.88rem;
+    line-height: 1.4;
+}
+
+/* Variaciones por tipo de control */
+.cultural {
+    background-color: rgba(52, 152, 219, 0.08);
+    border-left-color: var(--cultural-color);
+}
+.cultural h5 { color: var(--cultural-color); }
+
+.biologico {
+    background-color: rgba(46, 204, 113, 0.08);
+    border-left-color: var(--biologico-color);
+}
+.biologico h5 { color: var(--biologico-color); }
+
+.quimico {
+    background-color: rgba(231, 76, 60, 0.08);
+    border-left-color: var(--quimico-color);
+}
+.quimico h5 { color: var(--quimico-color); }
+
+
+/* ==========================================================================
+   6. CLASES DE UTILIDAD (CONTROL DE ESTADOS)
+   ========================================================================== */
+.hidden {
+    display: none !important;
+}
+
+/* Responsive para pantallas medianas o pequeñas */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* Pasa a una sola columna */
+    }
+    
+    .sidebar {
+        width: 70px;
+        padding: 2rem 0.5rem;
+        align-items: center;
+    }
+    
+    .logo h2, .menu a, .history-panel {
+        display: none; /* Simplifica el sidebar en móviles/tablets */
+    }
+}
+/* ==========================================================================
+   7. ESTILOS ESPECÍFICOS PARA EL LOGIN
+   ========================================================================== */
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1a252f 0%, #2e7d32 100%);
+    height: 100vh;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem;
+}
+
+.login-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 2.5rem 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header h2 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-header p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Estilo para las entradas de texto del login */
+.login-card input[type="email"],
+.login-card input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    outline: none;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.login-card input[type="email"]:focus,
+.login-card input[type="password"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+}
+
+.login-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.login-footer small {
+    color: var(--text-main);
+    line-height: 1.4;
+}
