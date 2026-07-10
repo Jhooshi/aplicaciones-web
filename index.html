@@ -8,41 +8,47 @@
 </head>
 <body>
 
+    <header class="site-header">
+        <nav class="top-nav" aria-label="Navegación principal">
+            <a class="brand" href="#" aria-label="AgroControl inicio">
+                <span class="brand-mark" aria-hidden="true">
+                    <span class="brand-leaf leaf-one"></span>
+                    <span class="brand-leaf leaf-two"></span>
+                </span>
+                <span class="brand-name">AgroControl</span>
+            </a>
+
+            <div class="menu">
+                <a href="#" id="menu-analizar" class="active">Analizar Cultivo</a>
+                <a href="#" id="menu-calculadora">Calculadora de Dosis</a>
+                <a href="#historial-reciente">Consultas Recientes</a>
+                <a href="#panel-resultados">Resultados</a>
+            </div>
+
+            <a href="login.html" id="btn-cerrar-sesion" class="nav-cta" onclick="sessionStorage.clear();">Cerrar Sesión</a>
+        </nav>
+
+        <section class="history-panel" id="historial-reciente" aria-label="Consultas recientes">
+            <h3>Consultas Recientes</h3>
+            <ul id="lista-historial"></ul>
+        </section>
+    </header>
+
     <div class="dashboard-container">
-        
-        <aside class="sidebar">
-            <div class="logo">
-                <h2>AgroControl</h2>
-            </div>
-            <nav class="menu">
-                <a href="#" class="active">Analizar Cultivo</a>
-                <a href="#">Historial Local</a>
-                <a href="#" id="btn-cerrar-sesion" style="margin-top: 10px; color: #e74c3c;">Cerrar Sesión</a>
-            </nav>
-            <div class="history-panel">
-                <h3>Consultas Recientes</h3>
-                <ul id="lista-historial">
-                    <li><a href="#">Consulta 1</a></li>
-                    <li><a href="#">Consulta 2</a></li>
-                </ul>
-            </div>
-        </aside>
 
         <main class="main-content">
-            <header class="main-header">
-                <h1>Monitoreo y Diagnóstico Agrícola</h1>
-                <p>Detecta plagas mediante descripción o imágenes asistido por IA.</p>
+            <header class="main-header-moderno">
+                <h1>Tecnología agrícola que funciona. <span class="accent-text">Exacta.</span></h1>
+                <p>Agencia interna de monitoreo y control biológico para tus cultivos</p>
             </header>
 
-            <section class="dashboard-grid">
-                
+            <section id="vista-diagnostico" class="dashboard-grid">
                 <div class="card card-form">
                     <h3>Formulario de Consulta</h3>
                     <form id="form-consulta">
-                        
                         <div class="form-group">
                             <label for="descripcion">Descripción de los síntomas o la plaga:</label>
-                            <textarea id="descripcion" placeholder="Ej. Hojas amarillas con pequeños puntos negros en el reverso, cultivo de tomate..."></textarea>
+                            <textarea id="descripcion" placeholder="Ej. Hojas amarillas con pequeños puntos negros en el reverso..."></textarea>
                         </div>
 
                         <div class="form-group">
@@ -74,15 +80,20 @@
                         
                         <div class="result-body">
                             <div class="result-section">
-                                <h4>Cultivos Afectados</h4>
+                                <h4>📸 Fotos de Referencia Real (Comunidad iNaturalist)</h4>
+                                <div id="inaturalist-galeria" class="photos-grid"></div>
+                            </div>
+
+                            <div class="result-section">
+                                <h4>🎯 Cultivos Afectados</h4>
                                 <p id="res-cultivos"></p>
                             </div>
                             <div class="result-section">
-                                <h4>Daños Causados</h4>
+                                <h4>⚠️ Daños Causados</h4>
                                 <p id="res-danos"></p>
                             </div>
                             
-                            <h3>Estrategias de Manejo</h3>
+                            <h3>🛡️ Estrategias de Manejo</h3>
                             <div class="management-grid">
                                 <div class="manage-box cultural">
                                     <h5>Control Cultural</h5>
@@ -99,13 +110,81 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
 
+            <section id="vista-calculadora" class="dashboard-grid hidden">
+                <div class="card">
+                    <h3>Cálculo de Insumos</h3>
+                    <form id="form-calculadora">
+                        <div class="form-group">
+                            <label for="calc-plaga">Selecciona la Plaga a tratar:</label>
+                            <select id="calc-plaga" required>
+                                <option value="" disabled selected>-- Elige una opción --</option>
+                                <option value="cogollero">Gusano Cogollero (Maíz)</option>
+                                <option value="pulgon">Pulgón Agrícola (Hortalizas)</option>
+                                <option value="blanca">Mosca Blanca (Tomate/Frutales)</option>
+                                <option value="arana">Araña Roja (General)</option>
+                            </select>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
+                            <div style="flex: 2;">
+                                <label style="display:block; margin-bottom:0.5rem; font-weight:600;">Tamaño del terreno:</label>
+                                <input type="number" id="calc-tamano" min="1" step="any" placeholder="Ej. 500" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius); outline: none;">
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="display:block; margin-bottom:0.5rem; font-weight:600;">Unidad:</label>
+                                <select id="calc-unidad" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius); outline: none; background: white;">
+                                    <option value="m2">m²</option>
+                                    <option value="ha">Hectáreas</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Calcular Dosificación</button>
+                    </form>
                 </div>
 
+                <div class="card" id="panel-calc-resultados">
+                    <h3>Dosificación Recomendada</h3>
+                    <div id="calc-placeholder" class="placeholder-results" style="height: 200px;">
+                        <p>Introduce los datos métricos de tu cultivo para generar las proporciones de mezcla.</p>
+                    </div>
+                    
+                    <div id="calc-resultado-activo" class="hidden">
+                        <div class="result-header">
+                            <h2 id="calc-res-plaga" style="color: var(--primary-color);">Tratamiento</h2>
+                        </div>
+                        
+                        <div class="management-grid">
+                            <div class="manage-box biologico">
+                                <h5 id="calc-lbl-insumo">Insumo Ecológico</h5>
+                                <p style="font-size: 1.4rem; font-weight: bold;" id="calc-res-insumo">0 L</p>
+                            </div>
+                            <div class="manage-box cultural">
+                                <h5>Volumen de Agua</h5>
+                                <p style="font-size: 1.4rem; font-weight: bold;" id="calc-res-agua">0 L</p>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">
+                            <h4>📅 Aplicación Técnica</h4>
+                            <p id="calc-res-nota" style="font-size: 0.9rem; font-style: italic;"></p>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
     </div>
 
+    <script>
+        document.getElementById('btn-cerrar-sesion')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.clear();
+            window.location.replace('login.html');
+        });
+    </script>
     <script type="module" src="js/main.js"></script>
 </body>
 </html>

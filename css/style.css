@@ -1,23 +1,26 @@
 /* ==========================================================================
-   1. VARIABLES DE DISEÑO (Colores y Estilos Globales)
+   1. VARIABLES DE DISEÑO (Estilo Prémium Minimalista)
    ========================================================================== */
 :root {
     --primary-color: #2e7d32;       /* Verde principal agrícola */
-    --primary-hover: #1b5e20;       /* Verde más oscuro para estados hover */
-    --bg-dashboard: #f4f6f9;        /* Fondo gris claro y limpio */
-    --bg-card: #ffffff;             /* Fondo de tarjetas blanco */
-    --text-main: #2c3e50;           /* Color de texto principal */
-    --text-muted: #7f8c8d;          /* Color de texto secundario/atenuado */
-    --border-color: #e2e8f0;        /* Color para bordes sutiles */
+    --primary-hover: #1b5e20;       /* Verde oscuro para hover */
+    --accent-color: #f59e0b;        /* Acento cálido para llamados a la acción */
+    --accent-strong: #d81b60;       /* Acento tipo referencia para barras y botones */
+    --bg-dashboard: #f8fafc;        /* Fondo gris ultra claro y limpio */
+    --bg-card: #ffffff;             /* Fondo blanco para tarjetas */
+    --text-main: #0f172a;           /* Texto oscuro moderno */
+    --text-muted: #64748b;          /* Texto secundario atenuado */
+    --border-color: #e2e8f0;        /* Bordes sutiles */
     
-    /* Colores para los tipos de control y alertas */
-    --cultural-color: #3498db;      /* Azul */
-    --biologico-color: #2ecc71;     /* Verde brillante */
-    --quimico-color: #e74c3c;        /* Rojo */
-    --warning-color: #f1c40f;       /* Amarillo */
+    /* Colores temáticos de control */
+    --cultural-color: #3498db;
+    --biologico-color: #2ecc71;
+    --quimico-color: #e74c3c;
+    --warning-color: #f1c40f;
     
-    --radius: 12px;                 /* Bordes redondeados modernos */
-    --transition: all 0.3s ease;    /* Transiciones suaves */
+    --radius-lg: 20px;              /* Bordes muy redondeados como la referencia */
+    --radius-md: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ==========================================================================
@@ -27,145 +30,349 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 body {
-    background-color: var(--bg-dashboard);
+    position: relative;
+    isolation: isolate;
+    overflow-x: hidden;
+    background:
+        linear-gradient(135deg, rgba(248, 250, 252, 0.92), rgba(236, 253, 245, 0.86)),
+        var(--bg-dashboard);
     color: var(--text-main);
     min-height: 100vh;
 }
 
+body:not(.login-body)::before,
+body:not(.login-body)::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body:not(.login-body) > * {
+    position: relative;
+    z-index: 1;
+}
+
+body:not(.login-body)::before {
+    background:
+        linear-gradient(115deg, transparent 0 24%, rgba(46, 125, 50, 0.08) 24% 26%, transparent 26% 45%, rgba(245, 158, 11, 0.08) 45% 46%, transparent 46% 100%),
+        repeating-linear-gradient(105deg, rgba(46, 125, 50, 0.08) 0 2px, transparent 2px 34px),
+        linear-gradient(180deg, rgba(240, 253, 244, 0.95), rgba(248, 250, 252, 0.98) 46%, rgba(236, 253, 245, 0.92));
+    background-size: 140% 140%, 320px 320px, 100% 100%;
+    opacity: 0.95;
+    animation: fieldDrift 18s linear infinite;
+}
+
+body:not(.login-body)::after {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.82) 0 1px, transparent 1px 100%),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+    background-size: 120px 120px, 64px 64px, 64px 64px;
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.92), transparent 78%);
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.92), transparent 78%);
+    opacity: 0.55;
+    animation: dataPulse 9s ease-in-out infinite alternate;
+}
+
+@keyframes fieldDrift {
+    from {
+        background-position: 0 0, 0 0, 0 0;
+    }
+
+    to {
+        background-position: 160px 90px, 320px 0, 0 0;
+    }
+}
+
+@keyframes dataPulse {
+    from {
+        opacity: 0.35;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0.65;
+        transform: translateY(-14px);
+    }
+}
+
 /* ==========================================================================
-   3. ESTRUCTURA PRINCIPAL (DASHBOARD LAYOUT)
+   3. STRUCTURA PRINCIPAL (DASHBOARD)
    ========================================================================== */
 .dashboard-container {
-    display: flex;
-    min-height: 100vh;
+    display: block;
+    min-height: calc(100vh - 190px);
 }
 
-/* Barra Lateral (Sidebar) */
-.sidebar {
-    width: 280px;
-    background-color: #1a252f;      /* Fondo oscuro elegante */
-    color: #ffffff;
-    padding: 2rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
 }
 
-.logo h2 {
-    font-size: 1.5rem;
-    color: #2ecc71;
+.top-nav {
+    min-height: 100px;
+    padding: 0 clamp(1rem, 5vw, 5.5rem);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: space-between;
+    gap: 2rem;
+    background-color: transparent;
+}
+
+.brand {
+    color: #1f2937;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex: 0 0 auto;
+}
+
+.brand-mark {
+    width: 64px;
+    height: 64px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(216, 27, 96, 0.28);
+    background:
+        radial-gradient(circle at 72% 22%, rgba(245, 158, 11, 0.22), transparent 30%),
+        #ffffff;
+    box-shadow: inset 0 0 0 5px rgba(46, 125, 50, 0.06);
+}
+
+.brand-mark::after {
+    content: "";
+    width: 4px;
+    height: 30px;
+    position: absolute;
+    bottom: 13px;
+    left: 30px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--accent-color), var(--primary-color));
+    transform: rotate(24deg);
+}
+
+.brand-leaf {
+    position: absolute;
+    display: block;
+    width: 18px;
+    height: 34px;
+    border-radius: 100% 0 100% 0;
+    transform-origin: 50% 85%;
+}
+
+.leaf-one {
+    top: 12px;
+    left: 31px;
+    background: linear-gradient(135deg, #4ade80, var(--primary-color));
+    transform: rotate(38deg);
+}
+
+.leaf-two {
+    top: 18px;
+    left: 18px;
+    background: linear-gradient(135deg, #fbbf24, #f97316);
+    transform: rotate(-36deg);
+}
+
+.brand-name {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 0;
 }
 
 .menu {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.35rem, 1.5vw, 1rem);
+    flex: 1;
 }
 
 .menu a {
-    color: #ecf0f1;
+    color: #1f2937;
     text-decoration: none;
-    padding: 0.8rem 1rem;
-    border-radius: var(--radius);
+    padding: 0.7rem 0.85rem;
+    border-radius: 999px;
     transition: var(--transition);
-    font-weight: 500;
+    font-weight: 650;
+    white-space: nowrap;
 }
 
 .menu a:hover, .menu a.active {
-    background-color: var(--primary-color);
-    color: #ffffff;
+    background-color: #f0fdf4;
+    color: var(--primary-color);
 }
 
-/* Panel de Historial dentro del Sidebar */
+.menu a.active {
+    box-shadow: inset 0 0 0 1px rgba(46, 125, 50, 0.18);
+}
+
+.nav-cta {
+    min-height: 46px;
+    padding: 0.78rem 1.55rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--primary-color), #43a047);
+    box-shadow: 0 12px 24px rgba(46, 125, 50, 0.2);
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+.nav-cta::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: #ffffff;
+}
+
+.nav-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(46, 125, 50, 0.28);
+}
+
 .history-panel {
-    margin-top: auto; /* Empuja el historial hacia abajo */
-    border-top: 1px solid #34495e;
-    padding-top: 1.5rem;
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 0 0 1.2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .history-panel h3 {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    white-space: nowrap;
 }
 
 #lista-historial {
+    flex: 1;
     list-style: none;
-    max-height: 200px;
-    overflow-y: auto;
+    display: flex;
+    gap: 0.6rem;
+    overflow-x: auto;
+    padding-bottom: 0.1rem;
+}
+
+#lista-historial:empty::before {
+    content: "Sin consultas recientes";
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    font-style: italic;
 }
 
 #lista-historial li {
-    padding: 0.6rem;
+    flex: 0 0 auto;
+    padding: 0.5rem 0.8rem;
     font-size: 0.85rem;
-    border-bottom: 1px solid #34495e;
+    color: #475569;
+    background-color: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
     cursor: pointer;
     transition: var(--transition);
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 #lista-historial li:hover {
-    color: #2ecc71;
-    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--primary-color);
+    border-color: rgba(46, 125, 50, 0.28);
+    background-color: #f0fdf4;
 }
 
-/* Área de Contenido Principal */
+/* Área de Trabajo Principal */
 .main-content {
-    flex: 1;
-    padding: 2rem;
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 3rem 0 4rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
-.main-header h1 {
-    font-size: 2rem;
-    color: #1a252f;
-    margin-bottom: 0.25rem;
+/* Encabezado Moderno tipo "Hero" */
+.main-header-moderno {
+    text-align: center;
+    margin-bottom: 1.5rem;
 }
 
-.main-header p {
+.main-header-moderno h1 {
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 0;
+    margin-bottom: 0.5rem;
+}
+
+.main-header-moderno .accent-text {
+    color: var(--primary-color);
+}
+
+.main-header-moderno p {
+    font-size: 1.15rem;
     color: var(--text-muted);
 }
 
-/* Grid del Dashboard (2 Columnas) */
+/* Grid del Dashboard */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr; /* Columna de resultados un poco más ancha */
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 2rem;
     align-items: start;
 }
 
-/* Targetas (Cards) Generales */
+/* ==========================================================================
+   4. TARJETAS MODERNAS DE ALTO IMPACTO
+   ========================================================================== */
 .card {
-    background-color: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color);
+    background-color: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02);
+    border: 1px solid rgba(15, 23, 42, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px); /* Sutil efecto flotante */
 }
 
 .card h3 {
     margin-bottom: 1.5rem;
-    font-size: 1.25rem;
-    color: #1a252f;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 0.5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.5px;
 }
 
 /* ==========================================================================
-   4. FORMULARIO DE CONSULTA
+   5. COMPONENTES DE FORMULARIOS Y BOTÓN PÍLDORA
    ========================================================================== */
 .form-group {
     margin-bottom: 1.5rem;
@@ -173,43 +380,48 @@ body {
 
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
     font-weight: 600;
     font-size: 0.95rem;
+    color: #334155;
 }
 
-textarea {
+textarea, select {
     width: 100%;
-    height: 120px;
-    padding: 0.75rem;
+    padding: 0.85rem;
     border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    resize: none;
+    border-radius: var(--radius-md);
+    background-color: #f8fafc;
     font-size: 0.95rem;
     outline: none;
     transition: var(--transition);
 }
 
-textarea:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+textarea {
+    height: 130px;
+    resize: none;
 }
 
-/* Zona de Carga de Archivos (Drag & Drop) */
+textarea:focus, select:focus {
+    border-color: var(--primary-color);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+}
+
 .file-drop-area {
     border: 2px dashed var(--border-color);
-    border-radius: var(--radius);
-    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    padding: 2rem;
     text-align: center;
     position: relative;
-    background-color: #fafafa;
+    background-color: #f8fafc;
     cursor: pointer;
     transition: var(--transition);
 }
 
 .file-drop-area:hover {
     border-color: var(--primary-color);
-    background-color: rgba(46, 125, 50, 0.02);
+    background-color: rgba(46, 125, 50, 0.01);
 }
 
 .file-drop-area input[type="file"] {
@@ -227,7 +439,6 @@ textarea:focus {
     font-size: 0.9rem;
 }
 
-/* Vista previa de imagen */
 #preview-container {
     margin-top: 1rem;
     text-align: center;
@@ -235,37 +446,47 @@ textarea:focus {
 
 #img-preview {
     max-width: 100%;
-    max-height: 180px;
+    max-height: 160px;
     border-radius: 8px;
-    border: 1px solid var(--border-color);
 }
 
-/* Botón Principal */
+/* BOTÓN ESTILO PÍLDORA DE ALTO IMPACTO (Alineado a la derecha) */
 .btn-primary {
-    width: 100%;
+    display: block;
+    margin-left: auto;         /* Lo empuja a la esquina inferior derecha */
+    width: auto;               /* Deja de ser tosco a pantalla completa */
     background-color: var(--primary-color);
-    color: white;
+    color: #ffffff;
     border: none;
-    padding: 0.85rem;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: var(--radius);
+    padding: 0.75rem 2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 50px;       /* Forma de píldora redonda perfecta */
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(46, 125, 50, 0.15);
     transition: var(--transition);
 }
 
 .btn-primary:hover {
     background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(46, 125, 50, 0.25);
+}
+
+.btn-primary:disabled {
+    background-color: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
 }
 
 /* ==========================================================================
-   5. FICHA DE RESULTADOS (RESPUESTA DE IA)
+   6. FICHA DE RESULTADOS Y GALERÍAS
    ========================================================================== */
 .placeholder-results {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 300px;
+    height: 250px;
     text-align: center;
     color: var(--text-muted);
     font-style: italic;
@@ -278,52 +499,65 @@ textarea:focus {
 
 .result-header h2 {
     color: var(--primary-color);
-    font-size: 1.6rem;
+    font-size: 1.8rem;
+    font-weight: 700;
 }
 
 .result-header em {
     color: var(--text-muted);
     font-size: 1rem;
     display: block;
-    margin-top: 0.2rem;
+    margin-top: 0.25rem;
 }
 
-/* Badge de Confianza */
 .badge {
     position: absolute;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    background-color: var(--warning-color);
-    color: #1a252f;
-    padding: 0.35rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: bold;
+    background-color: rgba(241, 196, 15, 0.15);
+    color: #b7791f;
+    padding: 0.4rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 700;
 }
 
 .result-section {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .result-section h4 {
-    font-size: 0.95rem;
-    color: #1a252f;
-    margin-bottom: 0.3rem;
+    font-size: 0.85rem;
+    color: #475569;
+    margin-bottom: 0.4rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .result-section p {
     font-size: 0.95rem;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
-/* Grid de estrategias de manejo (3 Cajas) */
-#resultado-activo h3 {
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
+.photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 12px;
+    margin: 0.75rem 0 1.5rem 0;
+}
+
+.inaturalist-img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: var(--transition);
+}
+
+.inaturalist-img:hover {
+    transform: scale(1.05);
 }
 
 .management-grid {
@@ -333,132 +567,265 @@ textarea:focus {
 }
 
 .manage-box {
-    padding: 1rem;
-    border-radius: 8px;
-    border-left: 5px solid transparent;
+    padding: 1.25rem;
+    border-radius: 12px;
+    border-left: 4px solid transparent;
 }
 
 .manage-box h5 {
-    font-size: 0.95rem;
+    font-size: 1rem;
     margin-bottom: 0.3rem;
 }
 
 .manage-box p {
-    font-size: 0.88rem;
-    line-height: 1.4;
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
 
-/* Variaciones por tipo de control */
-.cultural {
-    background-color: rgba(52, 152, 219, 0.08);
-    border-left-color: var(--cultural-color);
-}
+.cultural { background-color: #f0f7ff; border-left-color: var(--cultural-color); }
 .cultural h5 { color: var(--cultural-color); }
 
-.biologico {
-    background-color: rgba(46, 204, 113, 0.08);
-    border-left-color: var(--biologico-color);
-}
+.biologico { background-color: #f0fdf4; border-left-color: var(--biologico-color); }
 .biologico h5 { color: var(--biologico-color); }
 
-.quimico {
-    background-color: rgba(231, 76, 60, 0.08);
-    border-left-color: var(--quimico-color);
-}
+.quimico { background-color: #fef2f2; border-left-color: var(--quimico-color); }
 .quimico h5 { color: var(--quimico-color); }
 
-
-/* ==========================================================================
-   6. CLASES DE UTILIDAD (CONTROL DE ESTADOS)
-   ========================================================================== */
-.hidden {
-    display: none !important;
+.loading-text, .no-photos {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    font-style: italic;
 }
 
-/* Responsive para pantallas medianas o pequeñas */
-@media (max-width: 1024px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr; /* Pasa a una sola columna */
-    }
-    
-    .sidebar {
-        width: 70px;
-        padding: 2rem 0.5rem;
-        align-items: center;
-    }
-    
-    .logo h2, .menu a, .history-panel {
-        display: none; /* Simplifica el sidebar en móviles/tablets */
-    }
-}
 /* ==========================================================================
-   7. ESTILOS ESPECÍFICOS PARA EL LOGIN
+   7. ESTILOS DE LOGIN Y UTILIDADES
    ========================================================================== */
 .login-body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #1a252f 0%, #2e7d32 100%);
-    height: 100vh;
+    min-height: 100vh;
+    padding: 2rem;
+    background:
+        linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(18, 58, 42, 0.98)),
+        #0f172a;
 }
 
 .login-container {
     width: 100%;
-    max-width: 400px;
-    padding: 1rem;
+    max-width: 460px;
 }
 
 .login-card {
-    background-color: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 2.5rem 2rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+    border-radius: 18px;
+    padding: clamp(2rem, 6vw, 3.4rem);
+    box-shadow: 0 28px 60px rgba(2, 6, 23, 0.26);
+    border: 1px solid rgba(255, 255, 255, 0.75);
 }
 
 .login-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.2rem;
+}
+
+.login-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: 0.55rem;
+}
+
+.login-brand .brand-mark {
+    width: 54px;
+    height: 54px;
+}
+
+.login-brand .brand-mark::after {
+    height: 25px;
+    bottom: 11px;
+    left: 25px;
+}
+
+.login-brand .brand-leaf {
+    width: 15px;
+    height: 28px;
+}
+
+.login-brand .leaf-one {
+    top: 11px;
+    left: 27px;
+}
+
+.login-brand .leaf-two {
+    top: 16px;
+    left: 16px;
 }
 
 .login-header h2 {
     color: var(--primary-color);
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
+    font-size: 2.35rem;
+    line-height: 1;
+    letter-spacing: 0;
 }
 
 .login-header p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
+    color: #1f2937;
+    font-size: 1rem;
 }
 
-/* Estilo para las entradas de texto del login */
-.login-card input[type="email"],
-.login-card input[type="password"] {
+.login-card form {
+    display: grid;
+    gap: 1.2rem;
+}
+
+.login-card .form-group {
+    margin-bottom: 0;
+}
+
+.login-card input {
     width: 100%;
-    padding: 0.75rem;
+    height: 48px;
+    padding: 0 0.95rem;
     border: 1px solid var(--border-color);
-    border-radius: var(--radius);
+    border-radius: 12px;
+    background-color: #f8fafc;
+    color: var(--text-main);
+    font-size: 0.98rem;
     outline: none;
-    font-size: 0.95rem;
     transition: var(--transition);
 }
 
-.login-card input[type="email"]:focus,
-.login-card input[type="password"]:focus {
+.login-card input:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.12);
+}
+
+.login-card .btn-primary {
+    width: 100%;
+    min-height: 50px;
+    margin: 0.5rem 0 0;
+    justify-self: stretch;
+    box-shadow: 0 12px 24px rgba(46, 125, 50, 0.22);
 }
 
 .login-footer {
-    margin-top: 1.5rem;
+    margin-top: 1.6rem;
     text-align: center;
-    background-color: #f8f9fa;
-    padding: 0.75rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+    background-color: #f8fafc;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid #edf2f7;
 }
 
 .login-footer small {
-    color: var(--text-main);
-    line-height: 1.4;
+    color: #334155;
+    line-height: 1.7;
+}
+
+.login-footer strong {
+    color: #0f172a;
+}
+
+.hidden { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    body:not(.login-body)::before,
+    body:not(.login-body)::after {
+        animation: none;
+    }
+}
+
+@media (max-width: 1024px) {
+    .top-nav {
+        min-height: auto;
+        padding: 1.2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .menu {
+        order: 3;
+        width: 100%;
+        flex: 0 0 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .history-panel {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #lista-historial {
+        width: 100%;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .login-body {
+        padding: 1rem;
+    }
+
+    .login-card {
+        border-radius: 16px;
+    }
+
+    .login-header h2 {
+        font-size: 2rem;
+    }
+
+    .contact-strip-inner {
+        justify-content: flex-start;
+        overflow-x: auto;
+        gap: 1.2rem;
+    }
+
+    .top-nav {
+        justify-content: center;
+    }
+
+    .brand {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .brand-mark {
+        width: 54px;
+        height: 54px;
+    }
+
+    .brand-name {
+        font-size: 1.55rem;
+    }
+
+    .nav-cta {
+        width: min(100%, 240px);
+    }
+
+    .menu a {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .main-content {
+        padding-top: 2.2rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .badge {
+        position: static;
+        display: inline-flex;
+        margin-top: 0.75rem;
+        transform: none;
+    }
 }
