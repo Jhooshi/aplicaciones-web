@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroControl - Panel de Herramientas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <nav class="top-nav" aria-label="Navegación principal">
+            <a class="brand" href="index.html" aria-label="AgroControl inicio">
+                <span class="brand-mark" aria-hidden="true">
+                    <span class="brand-leaf leaf-one"></span>
+                    <span class="brand-leaf leaf-two"></span>
+                </span>
+                <span class="brand-name">AgroControl</span>
+            </a>
+
+            <div class="menu">
+                <a href="index.html">Inicio</a>
+                <a href="index.html#quienes-somos">Quiénes Somos</a>
+                <a href="#" class="active">Herramientas</a>
+                <a href="index.html#seccion-plantas">Plantas</a>
+                <a href="index.html#seccion-plagas">Plagas</a>
+                <a href="index.html#seccion-cuidados-prevencion">Cuidados</a>
+            </div>
+
+            <a href="#" id="btn-cerrar-sesion" class="nav-cta">Cerrar Sesión</a>
+        </nav>
+
+        <section class="history-panel" id="historial-reciente" aria-label="Consultas recientes">
+            <h3>Consultas Recientes</h3>
+            <ul id="lista-historial"></ul>
+        </section>
+    </header>
+
+    <div class="dashboard-container">
+
+        <main class="main-content">
+            <header class="main-header-moderno">
+                <h1>Panel de Monitoreo y <span class="accent-text">Control.</span></h1>
+                <p>Utiliza herramientas avanzadas de IA y dosificación técnica para proteger tus cultivos</p>
+            </header>
+
+            <!-- SECCIÓN DE HERRAMIENTAS INTERACTIVAS -->
+            <section id="seccion-herramientas" class="info-section" style="border-top: none; padding-top: 1rem;">
+                <!-- Selector de sub-herramienta -->
+                <div class="tool-switcher" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2.5rem;">
+                    <button id="btn-switch-analizar" class="btn-primary" style="margin: 0; display: inline-flex; align-items: center; gap: 0.5rem; background-color: var(--primary-color);">🔍 Analizar con Gemini IA</button>
+                    <button id="btn-switch-calculadora" class="btn-primary" style="margin: 0; display: inline-flex; align-items: center; gap: 0.5rem; background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); box-shadow: none;">🧮 Calculadora de Insumos</button>
+                </div>
+
+                <div id="vista-diagnostico" class="dashboard-grid">
+                    <div class="card card-form">
+                        <h3>Formulario de Consulta</h3>
+                        <form id="form-consulta">
+                            <div class="form-group">
+                                <label for="descripcion">Descripción de los síntomas o la plaga:</label>
+                                <textarea id="descripcion" placeholder="Ej. Hojas amarillas con pequeños puntos negros en el reverso..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="imagen-plaga">O sube una fotografía del daño:</label>
+                                <div class="file-drop-area">
+                                    <input type="file" id="imagen-plaga" accept="image/jpeg, image/png">
+                                    <p class="file-msg">Arrastra o selecciona una imagen (JPG/PNG)</p>
+                                </div>
+                                <div id="preview-container" class="hidden">
+                                    <img id="img-preview" src="" alt="Vista previa">
+                                </div>
+                            </div>
+
+                            <button type="submit" id="btn-enviar" class="btn-primary">Analizar con Gemini</button>
+                        </form>
+                    </div>
+
+                    <div class="card card-results" id="panel-resultados">
+                        <div class="placeholder-results">
+                            <p>Los resultados del análisis biológico aparecerán aquí una vez envíes el formulario.</p>
+                        </div>
+                        
+                        <div id="resultado-activo" class="hidden">
+                            <div class="result-header">
+                                <h2 id="res-nombre-comun">Nombre de la Plaga</h2>
+                                <em id="res-nombre-cientifico">Nombre científico</em>
+                                <span id="res-confianza" class="badge">0% Confianza</span>
+                            </div>
+                            
+                            <div class="result-body">
+                                <div class="result-section">
+                                    <h4>📸 Fotos de Referencia Real (Comunidad iNaturalist)</h4>
+                                    <div id="inaturalist-galeria" class="photos-grid"></div>
+                                </div>
+
+                                <div class="result-section">
+                                    <h4>🎯 Cultivos Afectados</h4>
+                                    <p id="res-cultivos"></p>
+                                </div>
+                                <div class="result-section">
+                                    <h4>⚠️ Daños Causados</h4>
+                                    <p id="res-danos"></p>
+                                </div>
+                                
+                                <h3>🛡️ Estrategias de Manejo</h3>
+                                <div class="management-grid">
+                                    <div class="manage-box cultural">
+                                        <h5>Control Cultural</h5>
+                                        <p id="res-cultural"></p>
+                                    </div>
+                                    <div class="manage-box biologico">
+                                        <h5>Control Biológico</h5>
+                                        <p id="res-biologico"></p>
+                                    </div>
+                                    <div class="manage-box quimico">
+                                        <h5>Control Químico</h5>
+                                        <p id="res-quimico"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="vista-calculadora" class="dashboard-grid hidden">
+                    <div class="card">
+                        <h3>Cálculo de Insumos</h3>
+                        <form id="form-calculadora">
+                            <div class="form-group">
+                                <label for="calc-plaga">Selecciona la Plaga a tratar:</label>
+                                <select id="calc-plaga" required>
+                                    <option value="" disabled selected>-- Elige una opción --</option>
+                                    <option value="cogollero">Gusano Cogollero (Maíz)</option>
+                                    <option value="pulgon">Pulgón Agrícola (Hortalizas)</option>
+                                    <option value="blanca">Mosca Blanca (Tomate/Frutales)</option>
+                                    <option value="arana">Araña Roja (General)</option>
+                                </select>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
+                                <div style="flex: 2;">
+                                    <label style="display:block; margin-bottom:0.5rem; font-weight:600;">Tamaño del terreno:</label>
+                                    <input type="number" id="calc-tamano" min="1" step="any" placeholder="Ej. 500" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); outline: none;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label style="display:block; margin-bottom:0.5rem; font-weight:600;">Unidad:</label>
+                                    <select id="calc-unidad" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); outline: none; background: white;">
+                                        <option value="m2">m²</option>
+                                        <option value="ha">Hectáreas</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary">Calcular Dosificación</button>
+                        </form>
+                    </div>
+
+                    <div class="card" id="panel-calc-resultados">
+                        <h3>Dosificación Recomendada</h3>
+                        <div id="calc-placeholder" class="placeholder-results" style="height: 200px;">
+                            <p>Introduce los datos métricos de tu cultivo para generar las proporciones de mezcla.</p>
+                        </div>
+                        
+                        <div id="calc-resultado-activo" class="hidden">
+                            <div class="result-header">
+                                <h2 id="calc-res-plaga" style="color: var(--primary-color);">Tratamiento</h2>
+                            </div>
+                            
+                            <div class="management-grid">
+                                <div class="manage-box biologico">
+                                    <h5 id="calc-lbl-insumo">Insumo Ecológico</h5>
+                                    <p style="font-size: 1.4rem; font-weight: bold;" id="calc-res-insumo">0 L</p>
+                                </div>
+                                <div class="manage-box cultural">
+                                    <h5>Volumen de Agua</h5>
+                                    <p style="font-size: 1.4rem; font-weight: bold;" id="calc-res-agua">0 L</p>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">
+                                <h4>📅 Aplicación Técnica</h4>
+                                <p id="calc-res-nota" style="font-size: 0.9rem; font-style: italic;"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('btn-cerrar-sesion')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.clear();
+            window.location.replace('login.html');
+        });
+    </script>
+    <script src="js/particles.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -14,6 +14,7 @@ formLogin?.addEventListener('submit', (e) => {
     const emailInput = document.getElementById('email').value.trim().toLowerCase();
     const passwordInput = document.getElementById('password').value.trim();
     
+    
     // Verificación de credenciales
     if (emailInput === CREDENCIALES_VALIDAS.email && passwordInput === CREDENCIALES_VALIDAS.password) {
         // Guardamos un identificador en sessionStorage (se borra al cerrar la pestaña)
@@ -21,7 +22,7 @@ formLogin?.addEventListener('submit', (e) => {
         sessionStorage.setItem('correo_usuario', emailInput);
         
         // Redireccionar al Dashboard principal
-        window.location.assign('index.html');
+        window.location.assign('dashboard.html');
     } else {
         alert('Credenciales incorrectas. Intenta con admin@agro.com y 12345');
     }

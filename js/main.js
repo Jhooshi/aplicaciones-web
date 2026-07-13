@@ -30,8 +30,8 @@ const resCultural = document.getElementById('res-cultural');
 const resBiologico = document.getElementById('res-biologico');
 const resQuimico = document.getElementById('res-quimico');
 
-const menuAnalizar = document.getElementById('menu-analizar');
-const menuCalculadora = document.getElementById('menu-calculadora');
+const btnSwitchAnalizar = document.getElementById('btn-switch-analizar');
+const btnSwitchCalculadora = document.getElementById('btn-switch-calculadora');
 const vistaDiagnostico = document.getElementById('vista-diagnostico');
 const vistaCalculadora = document.getElementById('vista-calculadora');
 const formCalculadora = document.getElementById('form-calculadora');
@@ -39,20 +39,36 @@ const formCalculadora = document.getElementById('form-calculadora');
 let imagenBase64 = null;
 
 // ==========================================================================
-// 3. NAVEGACIÓN DE PESTAÑAS
+// 3. NAVEGACIÓN DE PESTAÑAS (SWITCHER DE HERRAMIENTAS)
 // ==========================================================================
-menuAnalizar?.addEventListener('click', (e) => {
+btnSwitchAnalizar?.addEventListener('click', (e) => {
     e.preventDefault();
-    menuAnalizar.classList.add('active');
-    menuCalculadora.classList.remove('active');
+    btnSwitchAnalizar.style.backgroundColor = 'var(--primary-color)';
+    btnSwitchAnalizar.style.color = '#ffffff';
+    btnSwitchAnalizar.style.border = 'none';
+    btnSwitchAnalizar.style.boxShadow = '0 4px 14px rgba(16, 185, 129, 0.3)';
+
+    btnSwitchCalculadora.style.backgroundColor = 'transparent';
+    btnSwitchCalculadora.style.color = 'var(--primary-color)';
+    btnSwitchCalculadora.style.border = '2px solid var(--primary-color)';
+    btnSwitchCalculadora.style.boxShadow = 'none';
+
     vistaDiagnostico.classList.remove('hidden');
     vistaCalculadora.classList.add('hidden');
 });
 
-menuCalculadora?.addEventListener('click', (e) => {
+btnSwitchCalculadora?.addEventListener('click', (e) => {
     e.preventDefault();
-    menuCalculadora.classList.add('active');
-    menuAnalizar.classList.remove('active');
+    btnSwitchCalculadora.style.backgroundColor = 'var(--primary-color)';
+    btnSwitchCalculadora.style.color = '#ffffff';
+    btnSwitchCalculadora.style.border = 'none';
+    btnSwitchCalculadora.style.boxShadow = '0 4px 14px rgba(16, 185, 129, 0.3)';
+
+    btnSwitchAnalizar.style.backgroundColor = 'transparent';
+    btnSwitchAnalizar.style.color = 'var(--primary-color)';
+    btnSwitchAnalizar.style.border = '2px solid var(--primary-color)';
+    btnSwitchAnalizar.style.boxShadow = 'none';
+
     vistaCalculadora.classList.remove('hidden');
     vistaDiagnostico.classList.add('hidden');
 });

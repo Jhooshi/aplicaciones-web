@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AgroControl - Identificación de Plagas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
     <header class="site-header">
@@ -19,158 +25,242 @@
             </a>
 
             <div class="menu">
-                <a href="#" id="menu-analizar" class="active">Analizar Cultivo</a>
-                <a href="#" id="menu-calculadora">Calculadora de Dosis</a>
-                <a href="#historial-reciente">Consultas Recientes</a>
-                <a href="#panel-resultados">Resultados</a>
+                <a href="#quienes-somos">Inicio</a>
+                <a href="dashboard.html">Herramientas</a>
+                <a href="#seccion-plantas">Plantas</a>
+                <a href="#seccion-plagas">Plagas</a>
+                <a href="#seccion-cuidados-prevencion">Cuidados y Prevención</a>
             </div>
 
-            <a href="login.html" id="btn-cerrar-sesion" class="nav-cta" onclick="sessionStorage.clear();">Cerrar Sesión</a>
+            <a href="login.html" id="btn-auth-action" class="nav-cta">Iniciar Sesión</a>
         </nav>
-
-        <section class="history-panel" id="historial-reciente" aria-label="Consultas recientes">
-            <h3>Consultas Recientes</h3>
-            <ul id="lista-historial"></ul>
-        </section>
     </header>
 
     <div class="dashboard-container">
 
         <main class="main-content">
             <header class="main-header-moderno">
-                <h1>Tecnología agrícola que funciona. <span class="accent-text">Exacta.</span></h1>
-                <p>Agencia interna de monitoreo y control biológico para tus cultivos</p>
+                <h1><span id="typing-text"></span><span id="typing-cursor">|</span><span id="accent-fade" class="accent-text"></span></h1>
+                <p id="hero-subtitle" style="opacity: 0; transition: opacity 0.8s ease;">Monitoreo ecológico y diagnóstico biológico inteligente para tus cultivos</p>
+                <div id="hero-btn-container" style="opacity: 0; transition: opacity 0.8s ease; margin-top: 1.5rem;">
+                    <a href="dashboard.html" class="btn-primary"
+                        style="display: inline-block; text-decoration: none; margin-left: 0;">Usar Herramientas IA</a>
+                </div>
             </header>
 
-            <section id="vista-diagnostico" class="dashboard-grid">
-                <div class="card card-form">
-                    <h3>Formulario de Consulta</h3>
-                    <form id="form-consulta">
-                        <div class="form-group">
-                            <label for="descripcion">Descripción de los síntomas o la plaga:</label>
-                            <textarea id="descripcion" placeholder="Ej. Hojas amarillas con pequeños puntos negros en el reverso..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="imagen-plaga">O sube una fotografía del daño:</label>
-                            <div class="file-drop-area">
-                                <input type="file" id="imagen-plaga" accept="image/jpeg, image/png">
-                                <p class="file-msg">Arrastra o selecciona una imagen (JPG/PNG)</p>
-                            </div>
-                            <div id="preview-container" class="hidden">
-                                <img id="img-preview" src="" alt="Vista previa">
+            <!-- SECCIÓN DEL VIDEO ("Play intro") -->
+            <section class="video-section-wrapper">
+                <div id="video-intro-container">
+                    <div class="mock-video-wrapper" id="video-wrapper-container" style="position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden;">
+                        <div id="video-placeholder" style="position: absolute; inset: 0; z-index: 4;">
+                            <img src="img/plantas_cultivo.png" alt="Previsualización del video demo" style="width: 100%; height: 100%; object-fit: cover;">
+                            <div class="video-controls-bar" style="position: absolute; bottom: 0; left: 0; right: 0;">
+                                <div class="progress-bar"></div>
+                                <div class="controls-icons">🔊 ⚙️ ⛶</div>
                             </div>
                         </div>
-
-                        <button type="submit" id="btn-enviar" class="btn-primary">Analizar con Gemini</button>
-                    </form>
-                </div>
-
-                <div class="card card-results" id="panel-resultados">
-                    <div class="placeholder-results">
-                        <p>Los resultados del análisis biológico aparecerán aquí una vez envíes el formulario.</p>
                     </div>
-                    
-                    <div id="resultado-activo" class="hidden">
-                        <div class="result-header">
-                            <h2 id="res-nombre-comun">Nombre de la Plaga</h2>
-                            <em id="res-nombre-cientifico">Nombre científico</em>
-                            <span id="res-confianza" class="badge">0% Confianza</span>
-                        </div>
-                        
-                        <div class="result-body">
-                            <div class="result-section">
-                                <h4>📸 Fotos de Referencia Real (Comunidad iNaturalist)</h4>
-                                <div id="inaturalist-galeria" class="photos-grid"></div>
-                            </div>
+                    <button class="play-btn" id="floating-play-btn" aria-label="Reproducir video de presentación">
+                        <span class="play-icon" aria-hidden="true">▶</span>
+                        <span class="play-text">Play intro</span>
+                    </button>
+                </div>
+            </section>
 
-                            <div class="result-section">
-                                <h4>🎯 Cultivos Afectados</h4>
-                                <p id="res-cultivos"></p>
+            <!-- SECCIÓN 1: QUIÉNES SOMOS -->
+            <section id="quienes-somos" class="info-section">
+                <h2 class="info-section-title">Quiénes Somos</h2>
+                <div class="about-grid">
+                    <div class="about-text">
+                        <h3>Liderando la revolución ecológica y tecnológica en la agricultura</h3>
+                        <p>En <strong>AgroControl</strong>, fusionamos el poder del análisis inteligente y el monitoreo
+                            biológico para ofrecer soluciones sustentables a agricultores de todo el mundo. Nuestro
+                            compromiso es resguardar la salud de tus cultivos utilizando tecnología de inteligencia
+                            artificial avanzada, ayudándote a identificar amenazas de forma precisa y a calcular
+                            dosificaciones exactas de insumos orgánicos.</p>
+                        <p>Creemos en una agricultura libre de excesos químicos, donde la prevención y el control
+                            natural sean los pilares para un rendimiento saludable y respetuoso con el medio ambiente.
+                        </p>
+                        <div class="about-features">
+                            <div class="about-feature-card">
+                                <h4>🛡️ Análisis IA</h4>
+                                <p>Diagnóstico de plagas y enfermedades en segundos con Gemini IA.</p>
                             </div>
-                            <div class="result-section">
-                                <h4>⚠️ Daños Causados</h4>
-                                <p id="res-danos"></p>
+                            <div class="about-feature-card">
+                                <h4>🧮 Dosis Exactas</h4>
+                                <p>Cálculo preciso de insumos biológicos para evitar el desperdicio.</p>
                             </div>
-                            
-                            <h3>🛡️ Estrategias de Manejo</h3>
-                            <div class="management-grid">
-                                <div class="manage-box cultural">
-                                    <h5>Control Cultural</h5>
-                                    <p id="res-cultural"></p>
-                                </div>
-                                <div class="manage-box biologico">
-                                    <h5>Control Biológico</h5>
-                                    <p id="res-biologico"></p>
-                                </div>
-                                <div class="manage-box quimico">
-                                    <h5>Control Químico</h5>
-                                    <p id="res-quimico"></p>
-                                </div>
+                            <div class="about-feature-card">
+                                <h4>🐞 Manejo Orgánico</h4>
+                                <p>Enfoques culturales y biológicos respaldados por la ciencia.</p>
+                            </div>
+                            <div class="about-feature-card">
+                                <h4>📊 Historial Rápido</h4>
+                                <p>Guarda tus consultas para un seguimiento continuo del cultivo.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-image">
+                        <img src="img/quienes_somos.png" alt="Monitoreo Agrícola Tecnológico en Campo">
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 3: PLANTAS -->
+            <section id="seccion-plantas" class="info-section">
+                <h2 class="info-section-title">Nuestros Cultivos</h2>
+                <div class="plants-grid">
+                    <div class="plant-card">
+                        <div class="plant-image-container">
+                            <img src="img/plantas_cultivo.png" alt="Cultivos de maíz sanos">
+                        </div>
+                        <div class="plant-content">
+                            <h3>Maíz Agrícola</h3>
+                            <p>Uno de los cultivos más importantes, susceptible al ataque de insectos masticadores como
+                                el gusano cogollero. Requiere un monitoreo foliar y del brote apical para evitar
+                                pérdidas severas.</p>
+                            <div class="plant-vuln">
+                                <span>Plaga: Cogollero</span>
+                                <span>Riego: Moderado</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plant-card">
+                        <div class="plant-image-container">
+                            <!-- Show alternative layout or zoom using object-position -->
+                            <img src="img/plantas_cultivo.png" style="object-position: 30% 50%;"
+                                alt="Plantación de tomates saludables">
+                        </div>
+                        <div class="plant-content">
+                            <h3>Tomate y Solanáceas</h3>
+                            <p>Cultivos delicados con altas exigencias de nutrientes. Suelen sufrir de invasiones
+                                rápidas de Mosca Blanca y Araña Roja bajo condiciones cálidas e invernaderos.</p>
+                            <div class="plant-vuln">
+                                <span>Plaga: Mosca Blanca</span>
+                                <span>Riego: Frecuente</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plant-card">
+                        <div class="plant-image-container">
+                            <img src="img/plantas_cultivo.png" style="object-position: 70% 50%;"
+                                alt="Hortalizas verdes frescas">
+                        </div>
+                        <div class="plant-content">
+                            <h3>Hortalizas de Hoja</h3>
+                            <p>Ciclos de cultivo cortos como lechugas, coles y espinacas. Sus principales amenazas son
+                                colonias de pulgones que debilitan la planta y transmiten virosis perjudiciales.</p>
+                            <div class="plant-vuln">
+                                <span>Plaga: Pulgón Agrícola</span>
+                                <span>Nutrición: Alta</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section id="vista-calculadora" class="dashboard-grid hidden">
-                <div class="card">
-                    <h3>Cálculo de Insumos</h3>
-                    <form id="form-calculadora">
-                        <div class="form-group">
-                            <label for="calc-plaga">Selecciona la Plaga a tratar:</label>
-                            <select id="calc-plaga" required>
-                                <option value="" disabled selected>-- Elige una opción --</option>
-                                <option value="cogollero">Gusano Cogollero (Maíz)</option>
-                                <option value="pulgon">Pulgón Agrícola (Hortalizas)</option>
-                                <option value="blanca">Mosca Blanca (Tomate/Frutales)</option>
-                                <option value="arana">Araña Roja (General)</option>
-                            </select>
+            <!-- SECCIÓN 4: PLAGAS -->
+            <section id="seccion-plagas" class="info-section">
+                <h2 class="info-section-title">Catálogo de Plagas Comunes</h2>
+                <div class="pests-grid">
+                    <div class="pest-card">
+                        <div class="pest-image-container">
+                            <img src="img/plagas_control.png" alt="Insectos masticadores en yemas">
                         </div>
-
-                        <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
-                            <div style="flex: 2;">
-                                <label style="display:block; margin-bottom:0.5rem; font-weight:600;">Tamaño del terreno:</label>
-                                <input type="number" id="calc-tamano" min="1" step="any" placeholder="Ej. 500" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius); outline: none;">
-                            </div>
-                            <div style="flex: 1;">
-                                <label style="display:block; margin-bottom:0.5rem; font-weight:600;">Unidad:</label>
-                                <select id="calc-unidad" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius); outline: none; background: white;">
-                                    <option value="m2">m²</option>
-                                    <option value="ha">Hectáreas</option>
-                                </select>
-                            </div>
+                        <div class="pest-content">
+                            <h3>Gusano Cogollero</h3>
+                            <em>Spodoptera frugiperda</em>
+                            <p>Ataca perforando las hojas interiores y destruyendo el punto de crecimiento de la planta.
+                                Provoca retraso grave en el desarrollo foliar y fallas en la floración.</p>
+                            <span class="pest-control-badge">Control: Aceite de Neem o Bacillus Thuringiensis</span>
                         </div>
-
-                        <button type="submit" class="btn-primary">Calcular Dosificación</button>
-                    </form>
-                </div>
-
-                <div class="card" id="panel-calc-resultados">
-                    <h3>Dosificación Recomendada</h3>
-                    <div id="calc-placeholder" class="placeholder-results" style="height: 200px;">
-                        <p>Introduce los datos métricos de tu cultivo para generar las proporciones de mezcla.</p>
                     </div>
-                    
-                    <div id="calc-resultado-activo" class="hidden">
-                        <div class="result-header">
-                            <h2 id="calc-res-plaga" style="color: var(--primary-color);">Tratamiento</h2>
+                    <div class="pest-card">
+                        <div class="pest-image-container">
+                            <img src="img/plagas_control.png" style="filter: hue-rotate(50deg);"
+                                alt="Colonias de pulgones succionadores">
                         </div>
-                        
-                        <div class="management-grid">
-                            <div class="manage-box biologico">
-                                <h5 id="calc-lbl-insumo">Insumo Ecológico</h5>
-                                <p style="font-size: 1.4rem; font-weight: bold;" id="calc-res-insumo">0 L</p>
-                            </div>
-                            <div class="manage-box cultural">
-                                <h5>Volumen de Agua</h5>
-                                <p style="font-size: 1.4rem; font-weight: bold;" id="calc-res-agua">0 L</p>
+                        <div class="pest-content">
+                            <h3>Pulgón Agrícola</h3>
+                            <em>Aphididae</em>
+                            <p>Insectos succionadores que se agrupan en yemas jóvenes y en el envés foliar. Secretan
+                                melaza dulce que fomenta hongos destructores como la negrilla.</p>
+                            <span class="pest-control-badge">Control: Jabón Potásico o Fomento de Mariquitas</span>
+                        </div>
+                    </div>
+                    <div class="pest-card">
+                        <div class="pest-image-container">
+                            <img src="img/plagas_control.png" style="filter: hue-rotate(100deg);"
+                                alt="Monitoreo de mosca blanca">
+                        </div>
+                        <div class="pest-content">
+                            <h3>Mosca Blanca</h3>
+                            <em>Bemisia tabaci</em>
+                            <p>Pequeñas moscas aladas que debilitan la planta al succionar savia. Su principal peligro
+                                radica en su capacidad para diseminar gran variedad de virus fitopatógenos.</p>
+                            <span class="pest-control-badge">Control: Extracto de Ajo o Trampas Cromáticas
+                                Amarillas</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 5: CUIDADOS Y PREVENCIÓN -->
+            <section id="seccion-cuidados-prevencion" class="info-section">
+                <h2 class="info-section-title">Cuidados y Prevención</h2>
+                <div class="care-prev-container">
+                    <div class="care-column">
+                        <h3>💧 Cuidados Esenciales</h3>
+                        <div class="care-item">
+                            <div class="care-icon">💧</div>
+                            <div class="care-info">
+                                <h4>Riego Tecnificado y Eficiente</h4>
+                                <p>Aplica riego dirigido por goteo para nutrir directamente la raíz sin mojar en exceso
+                                    el follaje, disminuyendo la proliferación de hongos nocivos.</p>
                             </div>
                         </div>
-                        
-                        <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">
-                            <h4>📅 Aplicación Técnica</h4>
-                            <p id="calc-res-nota" style="font-size: 0.9rem; font-style: italic;"></p>
+                        <div class="care-item">
+                            <div class="care-icon">🍃</div>
+                            <div class="care-info">
+                                <h4>Nutrición Orgánica Balanceada</h4>
+                                <p>Abona regularmente con humus de lombriz o compost para dotar al suelo de microbios
+                                    benéficos, mejorando el vigor y defensas naturales de la planta.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">🔍</div>
+                            <div class="care-info">
+                                <h4>Inspección y Limpieza Periódica</h4>
+                                <p>Realiza podas sanitarias retirando hojas secas o infectadas y malezas. Esto previene
+                                    focos de humedad y disminuye hábitats de refugio de plagas.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prev-column">
+                        <h3>🛡️ Prevenciones Clave</h3>
+                        <div class="prev-item">
+                            <div class="prev-icon">🔄</div>
+                            <div class="prev-info">
+                                <h4>Rotación de Cultivos Planificada</h4>
+                                <p>Alterna especies de diferentes familias botánicas en cada ciclo productivo para
+                                    cortar de raíz el ciclo reproductivo de plagas persistentes en el suelo.</p>
+                            </div>
+                        </div>
+                        <div class="prev-item">
+                            <div class="prev-icon">🌱</div>
+                            <div class="prev-info">
+                                <h4>Cultivos Asociados Repelentes</h4>
+                                <p>Siembra plantas de aroma fuerte (albahaca, ajo, caléndula) entremezcladas con tu
+                                    cultivo para despistar y ahuyentar insectos dañinos de forma pasiva.</p>
+                            </div>
+                        </div>
+                        <div class="prev-item">
+                            <div class="prev-icon">🐞</div>
+                            <div class="prev-info">
+                                <h4>Refugios de Fauna Benéfica</h4>
+                                <p>Evita insecticidas de amplio espectro para fomentar el establecimiento de insectos
+                                    depredadores como las mariquitas, crisopas y avispas parásitas.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -178,13 +268,165 @@
         </main>
     </div>
 
+    <script src="js/particles.js"></script>
     <script>
-        document.getElementById('btn-cerrar-sesion')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            sessionStorage.clear();
-            window.location.replace('login.html');
+        // Manejo del estado del botón de sesión
+        const btnAuth = document.getElementById('btn-auth-action');
+        if (sessionStorage.getItem('usuario_autenticado') === 'true') {
+            btnAuth.innerText = 'Ir al Panel';
+            btnAuth.href = 'dashboard.html';
+        } else {
+            btnAuth.innerText = 'Iniciar Sesión';
+            btnAuth.href = 'login.html';
+        }
+
+        // Efecto de escritura animada (Google Antigravity style)
+        document.addEventListener('DOMContentLoaded', () => {
+            const text1 = "Tecnología agrícola que funciona. ";
+            const text2 = "Exacta.";
+            const textSpan = document.getElementById('typing-text');
+            const accentSpan = document.getElementById('accent-fade');
+            const cursorSpan = document.getElementById('typing-cursor');
+            const subtitle = document.getElementById('hero-subtitle');
+            const btnContainer = document.getElementById('hero-btn-container');
+            
+            let index1 = 0;
+            let index2 = 0;
+
+            function typePart1() {
+                if (index1 < text1.length) {
+                    textSpan.textContent += text1.charAt(index1);
+                    index1++;
+                    setTimeout(typePart1, 60);
+                } else {
+                    // Movemos el cursor al final de la etiqueta h1 para que siga a "Exacta."
+                    if (accentSpan && cursorSpan) {
+                        accentSpan.parentNode.appendChild(cursorSpan);
+                    }
+                    typePart2();
+                }
+            }
+
+            function typePart2() {
+                if (index2 < text2.length) {
+                    accentSpan.textContent += text2.charAt(index2);
+                    index2++;
+                    setTimeout(typePart2, 80);
+                } else {
+                    // Mostrar subtítulo y botón suavemente tras terminar la escritura
+                    if (subtitle) subtitle.style.opacity = '1';
+                    if (btnContainer) btnContainer.style.opacity = '1';
+                }
+            }
+
+            if (textSpan) {
+                accentSpan.textContent = "";
+                typePart1();
+            }
+
+            // Efecto de escala al hacer scroll (bidireccional y suave)
+            const videoContainer = document.getElementById('video-intro-container');
+            if (videoContainer) {
+                const handleScroll = () => {
+                    const rect = videoContainer.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+                    
+                    // Calculamos el centro de la pantalla y del contenedor
+                    const containerCenter = rect.top + rect.height / 2;
+                    const viewportCenter = windowHeight / 2;
+                    const distanceFromCenter = Math.abs(containerCenter - viewportCenter);
+                    
+                    // Rango en el que la animación de escala tiene influencia
+                    const maxDistance = windowHeight * 0.7;
+                    const progress = Math.min(distanceFromCenter / maxDistance, 1); // 0 (centrado) a 1 (lejos)
+                    
+                    // Escala va de 1.0 (en el centro) a 0.85 (fuera de pantalla)
+                    const scale = 1.0 - (progress * 0.15);
+                    // Opacidad va de 1.0 (en el centro) a 0.2 (fuera de pantalla)
+                    const opacity = 1.0 - (progress * 0.8);
+                    
+                    videoContainer.style.transform = `scale(${scale})`;
+                    videoContainer.style.opacity = opacity;
+                };
+                
+                window.addEventListener('scroll', handleScroll);
+                handleScroll(); // Ejecutar inicialmente
+            }
+
+            // Efecto de botón de reproducción magnético (sigue al mouse de forma fluida)
+            const playBtn = document.getElementById('floating-play-btn');
+            const videoWrapper = document.getElementById('video-wrapper-container');
+            let isVideoLoaded = false;
+            
+            if (videoContainer && playBtn) {
+                let mouseX = 0;
+                let mouseY = 0;
+                let btnX = 0;
+                let btnY = 0;
+                let isHovered = false;
+                
+                videoContainer.addEventListener('mouseenter', () => {
+                    if (!isVideoLoaded) {
+                        isHovered = true;
+                        playBtn.style.opacity = '1';
+                    }
+                });
+                
+                videoContainer.addEventListener('mouseleave', () => {
+                    isHovered = false;
+                    playBtn.style.opacity = '0';
+                    playBtn.style.transform = `translate(0px, 0px) scale(0.5)`;
+                });
+                
+                videoContainer.addEventListener('mousemove', (e) => {
+                    if (!isVideoLoaded) {
+                        const rect = videoContainer.getBoundingClientRect();
+                        // Restamos la mitad del tamaño del botón (50px) para centrarlo con la punta del mouse
+                        mouseX = e.clientX - rect.left - 50;
+                        mouseY = e.clientY - rect.top - 50;
+                    }
+                });
+                
+                function updateMagneticButton() {
+                    if (isHovered && !isVideoLoaded) {
+                        // Suavizado por interpolación lineal (Lerp) de 0.12
+                        btnX += (mouseX - btnX) * 0.12;
+                        btnY += (mouseY - btnY) * 0.12;
+                        playBtn.style.transform = `translate(${btnX}px, ${btnY}px) scale(1)`;
+                    }
+                    requestAnimationFrame(updateMagneticButton);
+                }
+                updateMagneticButton();
+                
+                // Carga dinámica del IFrame de YouTube al dar clic en la tarjeta
+                const loadAndPlayVideo = () => {
+                    if (isVideoLoaded) return;
+                    isVideoLoaded = true;
+                    isHovered = false;
+                    
+                    if (videoWrapper) {
+                        // Inyectar el iframe con autoplay=1 y controles activos para poder pausar con un solo clic
+                        videoWrapper.innerHTML = `
+                            <iframe id="intro-video-iframe" width="100%" height="100%" 
+                                src="https://www.youtube.com/embed/0GMYLkLAhoI?autoplay=1&controls=1&modestbranding=1&rel=0" 
+                                title="AgroControl Intro Video" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen 
+                                style="position: absolute; inset: 0; width: 100%; height: 100%; border: none;">
+                            </iframe>
+                        `;
+                    }
+                    
+                    // Ocultar botón flotante (el cursor nativo nunca se oculta)
+                    playBtn.style.opacity = '0';
+                };
+                
+                // Habilitamos clic en el contenedor para disparar la carga y reproducción
+                videoContainer.addEventListener('click', loadAndPlayVideo);
+            }
         });
     </script>
-    <script type="module" src="js/main.js"></script>
 </body>
+
 </html>
